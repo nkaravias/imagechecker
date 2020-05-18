@@ -1,0 +1,16 @@
+---
+input_csv_path: ''
+output_csv_path: ''
+allowed_image_types:
+  - gif
+  - pbm
+  - pgm
+  - ppm
+  - tiff
+  - webp
+  - rast
+  - xbm
+  - jpeg
+  - bmp
+  - png
+  - exr
