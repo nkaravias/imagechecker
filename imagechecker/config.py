@@ -2,24 +2,54 @@ import csv
 import logging
 import imghdr
 import os.path
+import argparse
+import yaml
 
 LOGGER = logging.getLogger(__name__)
-ALLOWED_IMAGE_TYPES = ['gif', 'pbm', 'pgm', 'ppm', 'tiff', 'webp', 'rast', 'xbm', 'jpeg', 'bmp', 'png', 'exr']
 
 
 class AppConfig:
-    def __init__(self, path):
-        self.input_path = ''
-        self.output_path = ''
+    """
+        Represents the imagechecker configuration
+    """
+    def __init__(self):
+        self.REQUIRED_CFG_SETTINGS = ['input_csv_path', 'output_csv_path', 'allowed_image_types']
+        self.config_path = self.parse_input().config
+        self.input, self.output, self.image_whitelist = self.load_app_config(self.config_path)
+        LOGGER.info('ImageChecker config set to: {}'.format(self.config_path))
+
+    def parse_input(self):
+        """ Use argparser to allow the user to override the default ImageChecker configuration """
+        parser = argparse.ArgumentParser(description='ImageChecker')
+        parser.add_argument('-c',
+                            '--config',
+                            default=os.path.abspath('./conf/config.yaml'),
+                            help='Specify the path of the ImageChecker configuration')
+        return parser.parse_args()
+
+    def load_app_config(self, path):
+        """ Load the ImageChecker configuration and return the values from the YAML """
+        with open(path) as f:
+            cfg_props = yaml.safe_load(f)
+        self.validate(cfg_props)
+        return [cfg_props[setting] for setting in self.REQUIRED_CFG_SETTINGS]
+
+    def validate(self, cfg_props):
+        """ Ensure that the required fields are present in the ImageChecker configuration """
+        if not all(elem in cfg_props for elem in self.REQUIRED_CFG_SETTINGS):
+            exit((LOGGER.error(
+                'Exiting... - Required properties {} missing from configuration at: {}'
+                .format(self.REQUIRED_CFG_SETTINGS, self.config_path))))
 
 
 class CsvConfig:
     """
-        Represents the user provided input configuration & also handles the output
+        Represents the input & output configuration
     """
-    def __init__(self, path, output_path):
-        self.path = path
-        self.output_path = output_path
+    def __init__(self, app_cfg):
+        self.path = app_cfg.input
+        self.output_path = app_cfg.output
+        self.image_whitelist = app_cfg.image_whitelist
         self.name = ''
         self.contents = []
         FORMAT = "%(asctime)s:%(levelname)s:%(name)s: [%(filename)s:%(lineno)d] %(message)s"
@@ -35,9 +65,9 @@ class CsvConfig:
     def is_allowed_image(self, path):
         """ Checks if the image type is valid as per the configuration type whitelist """
         image_type = imghdr.what(path)
-        if image_type not in ALLOWED_IMAGE_TYPES:
+        if image_type not in self.image_whitelist:
             LOGGER.error('Line {} is not a supported image type'.format(path))
-            LOGGER.error('Allowed types: {}'.format(ALLOWED_IMAGE_TYPES))
+            LOGGER.error('Allowed types: {}'.format(self.image_whitelist))
             return False
         return True
 

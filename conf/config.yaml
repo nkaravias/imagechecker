@@ -1,6 +1,6 @@
 ---
-input_csv_path: ''
-output_csv_path: ''
+input_csv_path: 'examples/input.csv'
+output_csv_path: 'output-test.csv'
 allowed_image_types:
   - gif
   - pbm

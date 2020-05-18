@@ -2,12 +2,10 @@ import logging
 import time
 from skimage.measure import compare_ssim
 
-from config import CsvConfig
+from config import CsvConfig, AppConfig
 from image import Image
 
 LOGGER = logging.getLogger(__name__)
-CFG_PATH = 'examples/input.csv'
-OUTPUT_PATH = 'examples/output.csv'
 
 
 class ImageChecker:
@@ -20,7 +18,14 @@ class ImageChecker:
         NotImplemented
 
     def main():
-        csv_input = CsvConfig(CFG_PATH, OUTPUT_PATH)
+        app_cfg = AppConfig()
+
+        LOGGER.info('Input csv path:{}'.format(app_cfg.input))
+
+        LOGGER.info('Output csv path:{}'.format(app_cfg.output))
+        LOGGER.info('Image whitelist:{}'.format(app_cfg.image_whitelist))
+
+        csv_input = CsvConfig(app_cfg)
         csv_input.validate()
         csv_input.report('w', 'image1', 'image2', 'similarity', 'elapsed')
 
