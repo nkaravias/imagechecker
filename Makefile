@@ -1,3 +1,8 @@
+#include .env
+#ifndef TAG
+#$(error The TAG variable is missing.)
+#endif
+
 clean-pyc:
 	find . -name '*.pyc' -exec rm --force {} +
 	find . -name '*.pyo' -exec rm --force {} +
@@ -15,3 +20,13 @@ test: clean-pyc
 
 run:
 	python imagechecker/main.py
+
+docker-build:
+	docker-compose build
+
+# This will wipe all your stopped containers - Use at your own peril
+#docker-clean:
+#	@docker system prune --volumes --force
+
+docker-run:
+	docker-compose up

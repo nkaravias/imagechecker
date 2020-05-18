@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  imagechecker:
+    image: nkaravias/imagechecker:${TAG}
+    build: .
+    volumes:
+     - ./tests/docker:/opt/imagechecker/etc
+     - ./tests/assets/images:/images
+     - ./out:/opt/imagechecker/out
+#docker run -v ${PWD}/tests/docker:/opt/imagechecker/etc -v ${PWD}/examples/images:/images -v ${PWD}/out:/opt/imagechecker/out -it test ^
