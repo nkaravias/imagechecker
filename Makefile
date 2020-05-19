@@ -21,6 +21,9 @@ test: clean-pyc
 run:
 	python imagechecker/main.py
 
+compose-dump:
+	docker-compose config
+
 docker-build:
 	docker-compose build
 
