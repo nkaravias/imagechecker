@@ -6,6 +6,7 @@ Developer guide
 * Set up virtualenv & install python module dependencies
 * Install docker / Kubernetes
 * UML Class diagrams
+* Generated documentation
 * Developer workflow
    * Python-only
    * Docker
@@ -71,6 +72,18 @@ version: '3.0'
 ### UML Class Diagrams ###
 
 UML class diagrams have been generated using pyreverse and are stored in the [docs/developer/uml](uml) directory
+
+### Generated docstring documentation ###
+
+Using sphinx, the generated docstring documentation can be found at imagechecker/docs/build/html/index.html
+
+To generate the documentation:
+```console
+# Install sphinx
+pip install -r requirements.txt
+cd docs/
+make html
+```
 
 ### Build & Run (Python) ###
 
