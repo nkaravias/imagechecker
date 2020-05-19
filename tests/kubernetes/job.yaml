@@ -1,0 +1,55 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: imagechecker
+  namespace: imagechecker-dev
+  labels:
+    app.kubernetes.io/name: imagechecker
+spec:
+  template:
+    spec:
+      serviceAccountName: imagechecker
+      containers:
+      - image: nkaravias/imagechecker:1.1
+        name: imagechecker
+        volumeMounts:
+        - name: config-yaml
+          mountPath: /opt/imagechecker/etc/config.yaml
+          subPath: config.yaml        
+        - name: input-csv
+          mountPath: /opt/imagechecker/etc/input.csv
+          subPath: input.csv
+        - name: output-csv
+          mountPath: /opt/imagechecker/out
+        - name: image1-png
+          mountPath: /images/image1.png
+          subPath: image1.png        
+        - name: image1-jpg
+          mountPath: /images/image1.jpg
+          subPath: image1.jpg
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "800m"
+          requests:
+            memory: "128Mi"
+            cpu: "200m"        
+      restartPolicy: Never
+      volumes:
+      - name: config-yaml
+        configMap:
+          name: config.yaml
+      - name: input-csv
+        configMap:
+          name: input.csv
+      - name: output-csv
+        emptyDir: {}
+      - name: image1-jpg
+        configMap:
+          name: image1.jpg
+      - name: image1-png
+        configMap:
+          name: image1.png
+
+
+

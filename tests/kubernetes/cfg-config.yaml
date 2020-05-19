@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  config.yaml: |-
+    ---
+    input_csv_path: '/opt/imagechecker/etc/input.csv'
+    output_csv_path: '/opt/imagechecker/out/output-test.csv'
+    allowed_image_types:
+      - gif
+      - pbm
+      - pgm
+      - ppm
+      - tiff
+      - webp
+      - rast
+      - xbm
+      - jpeg
+      - bmp
+      - png
+      - exr
+kind: ConfigMap
+metadata:
+  name: config.yaml
+  namespace: imagechecker-dev

@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  input.csv: |-
+    /images/image1.jpg /images/image1.png
+kind: ConfigMap
+metadata:
+  name: input.csv
+  namespace: imagechecker-dev

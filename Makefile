@@ -30,3 +30,10 @@ docker-build:
 
 docker-run:
 	docker-compose up
+
+k8s-run:
+	@make -s docker-build
+	kubectl apply -f tests/kubernetes/
+	kubectl wait --for=condition=complete job/imagechecker --timeout=60s -n imagechecker-dev
+	kubectl logs job/imagechecker -n imagechecker-dev
+
