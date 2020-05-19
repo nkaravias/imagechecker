@@ -1,4 +1,4 @@
-
+![Imagechecker linting](https://github.com/nkaravias/imagechecker/workflows/Imagechecker%20linting/badge.svg?branch=master)
 
 BJORN's IMAGE CHECKER
 ============
